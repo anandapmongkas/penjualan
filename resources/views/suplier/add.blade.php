@@ -52,7 +52,7 @@ Suplier
                     </div>  
                 </div>
                 <div class="modal-footer">
-                  <a class="btn btn-secondary" href="/suplier" role="button">Batal</a>
+                  <a class="btn btn-secondary" href="/supplier" role="button">Batal</a>
                   <button type="submit" class="btn btn-success">Simpan</button>
                 </div>    
             </div>    
