@@ -39,8 +39,8 @@
         <td>{{$item->nama}}</td>
         <td>{{$item->harga}}</td>
         <td>{{$item->stok}}</td>
-        <td>{{$item->suplier->nama}}</td>
-        <td>{{$item->kategori->nama}}</td>
+        <th>{{! empty($item->suplier->nama) ? $item->suplier->nama : ''}}</th>
+        <th>{{! empty($item->kategori->nama) ? $item->kategori->nama : ''}}</th>
         <td>
             <a href="/barang/{{$item->id}}/edit" class="btn btn-warning btn-bg"><i class="fa-solid fa-edit"></i></a>
             |

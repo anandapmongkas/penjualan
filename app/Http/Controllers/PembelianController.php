@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Penjualan;
-use App\Models\Pembeli;
+use App\Models\Pembelian;
 use App\Models\Barang;
 use Illuminate\Http\Request;
 
-class PenjualanController extends Controller
+class PembelianController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +15,9 @@ class PenjualanController extends Controller
      */
     public function index()
     {
-        $pembeli = Pembeli::all();
         $barang = Barang::all();
-        $penjualan = Penjualan::all();
-        return view('penjualan.index', compact('penjualan', 'barang', 'pembeli'));
+        $pembelian = Pembelian::all();
+        return view('pembelian.index', compact('pembelian', 'barang'));
     }
 
     /**
@@ -43,94 +41,99 @@ class PenjualanController extends Controller
         $validate = $request->validate([
             'barang_id' => 'required',
             'jumlah'    => 'required|numeric',
-            'harga_jual'     => 'required|numeric',
+            'harga'     => 'required|numeric',
         ]);
 
 
-        $penjualan = Penjualan::create([
+        $pembelian = Pembelian::create([
             'barang_id' => $request->barang_id,
-            'pembeli_id' => $request->pembeli_id,
             'jumlah' => $request->jumlah,
-            'harga_jual' => $request->harga_jual
+            'harga' => $request->harga
         ]);
 
         $id_barang = $request->barang_id;
         $barang = Barang::find($id_barang);
-        $barang->stok -= $request->jumlah;
+        $barang->stok += $request->jumlah;
         $barang->update();
 
-        $penjualan->save();
+        $pembelian->save();
 
-        return redirect('penjualan');
+        // $barang = Pembelian::where('id', $pembelian->id)->get();
+
+        // foreach($barang as $item){
+        //     $barangs = Barang::find($item->id);
+        //     $barangs->stok += $item->jumlah;
+        //     $barangs->update();
+        // }
+
+        return redirect('pembelian');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Penjualan  $penjualan
+     * @param  \App\Models\Pembelian  $pembelian
      * @return \Illuminate\Http\Response
      */
-    public function show(Penjualan $penjualan)
+    public function show($id)
     {
-        //
+        $pembelian = Pembelian::find($id);
+        return view('pembelian.form', compact('pembelian'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Penjualan  $penjualan
+     * @param  \App\Models\Pembelian  $pembelian
      * @return \Illuminate\Http\Response
      */
-    public function edit(Penjualan $penjualan)
+    public function edit($id)
     {
         $barang = Barang::all();
-        $pembeli = Pembeli::all();
-        $penjualan = Penjualan::find($id);
-        return view('penjualan.form', compact('penjualan', 'barang', 'pembeli'));
+        $pembelian = Pembelian::find($id);
+        return view('pembelian.form', compact('pembelian', 'barang'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Penjualan  $penjualan
+     * @param  \App\Models\Pembelian  $pembelian
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Penjualan $penjualan)
+    public function update(Request $request, Pembelian $pembelian)
     {
         $validate = $request->validate([
             'barang_id' => 'required',
             'jumlah'    => 'required|numeric',
-            'harga_jual'     => 'required|numeric',
+            'harga'     => 'required|numeric',
         ]);
 
 
-        $penjualan->update([
+        $pembelian->update([
             'barang_id' => $request->barang_id,
-            'pembeli_id' => $request->pembeli_id,
             'jumlah' => $request->jumlah,
-            'harga_jual' => $request->harga_jual
+            'harga' => $request->harga
         ]);
 
         $id_barang = $request->barang_id;
         $barang = Barang::find($id_barang);
-        $barang->stok -= $request->jumlah;
+        $barang->stok += $request->jumlah;
         $barang->update();
 
-        return redirect('penjualan');
+        return redirect('pembelian');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Penjualan  $penjualan
+     * @param  \App\Models\Pembelian  $pembelian
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Penjualan $penjualan)
+    public function destroy($id)
     {
-        $penjualan = Penjualan::find($id);
-        $penjualan->delete();
-
-        return redirect('penjualan');
+        $pembelian = Pembelian::find($id);
+        $pembelian->delete();
+        return redirect('pembelian');
     }
 }

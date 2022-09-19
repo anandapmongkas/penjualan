@@ -103,7 +103,7 @@ class BarangController extends Controller
 
         ]);
 
-        return redirect('barang');
+        return redirect('b');
     }
 
     /**
